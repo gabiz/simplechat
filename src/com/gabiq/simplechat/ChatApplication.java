@@ -1,6 +1,9 @@
+package com.gabiq.simplechat;
 import android.app.Application;
 
+import com.gabiq.simplechat.models.Message;
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 
 public class ChatApplication extends Application {
@@ -9,6 +12,9 @@ public class ChatApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // Register your parse models here
+        ParseObject.registerSubclass(Message.class);
+        // Existing initialization happens after all classes are registered
         Parse.initialize(this, YOUR_APPLICATION_ID, YOUR_CLIENT_KEY);
     }
 }
