@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,18 +37,23 @@ public class ChatActivity extends Activity {
     private ListView lvChat;
     private ArrayList<Message> mMessages;
     private ChatListAdapter mAdapter;
+    
+ // Create a handler which can run code periodically
+    private Handler handler = new Handler();
+
 
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        // User login
-        if (ParseUser.getCurrentUser() != null) { // start with existing user
+        if (ParseUser.getCurrentUser() != null) {
             startWithCurrentUser();
-        } else { // If not logged in, login as a new anonymous user
+        } else {
             login();
         }
+        // Run the runnable object defined every 100ms
+        handler.postDelayed(runnable, 100);
     }
     
     
@@ -119,5 +125,18 @@ public class ChatActivity extends Activity {
                     }
                 }
             });
+    }
+    
+ // Defines a runnable which is run every 100ms
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+           refreshMessages();
+           handler.postDelayed(this, 100);
+        }
+    };
+
+    private void refreshMessages() {
+        receiveMessage();       
     }
 }
